@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="user-scalable=no,initial-scale=1" />
+  <title>ParSL's dev</title>
+  <link rel="stylesheet" href="resources/font/style.css">
+  <link rel="icon" type="image/png" href="./data/favicon.png" />
+</head>
+
+<body>
+  <script type="module">
+    import GUI from 'https://cdn.jsdelivr.net/npm/lil-gui@0.21/+esm';
+    window.GUI = GUI
+  </script>
+  <script src="script/core/libs/fpsmeter.js"></script>
+  <script src="script/__globalCustom.js"></script>
+  <script src="script/core/__global.js"></script>
+  <script src="script/core/utils.js"></script>
+  <script type="module" src="script/core/gameObjects.js"></script>
+  <script type="module" src="script/core/gameManagers.js"></script>
+  <script type="module" src="script/core/uiObject.js"></script>
+
+  <script src="script/core/libs/pixi.js"></script>
+  <script src="script/core/libs/pixi-filters.js"></script>
+  <script type="module">
+    import * as THREE from "./script/core/libs/three.module.min.js";
+    window.THREE = THREE;
+  </script>
+
+
+<script src="script/__data.js"></script>
+  <script src="script/_textures.js"></script>
+  <script src="script/_three.js"></script>
+  <script type="module" src="script/core/_main.js"></script>
+</body>
+
+</html>

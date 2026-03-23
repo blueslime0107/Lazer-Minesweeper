@@ -1,0 +1,22 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  width:100%;
+  height:100%;
+  overflow: hidden;
+  background: #4c8847;
+  font-family: sans-serif;
+}
+
+@font-face {
+  font-family: 'Cafe24Ohsquare';
+  src: url('Cafe24Ohsquare.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'AnonymousPro';
+  src: url('AnonymousPro-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'KaiseiHarunoUmi';
+  src: url('KaiseiHarunoUmi-Bold.ttf') format('truetype');
+}

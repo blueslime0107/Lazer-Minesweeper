@@ -1,0 +1,26 @@
+{
+    "langName": "English",
+    "font": [
+        "Cafe24Ohsquare",
+        "Arial"
+    ],
+    "test": "test",
+    "menu_start": "Start Game",
+    "menu_continue": "Continue",
+    "menu_option": "Option",
+    "menu_save": "Save Now",
+    "menu_exit": "Exit",
+    "menu_back": "Back",
+    "saved_done": "Saved.",
+    "option_language": "Language",
+    "option_fullscreen": "Fullscreen",
+    "main_title": "Main Game",
+    "main_mode": "Mode",
+    "main_stage": "Stage",
+    "main_playtime": "Play Time",
+    "main_back": "ESC : Pause",
+    "pause_title": "PAUSED",
+    "pause_resume": "Resume",
+    "pause_save": "Save",
+    "pause_back_title": "Back to Title"
+}

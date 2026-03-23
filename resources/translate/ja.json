@@ -1,0 +1,26 @@
+{
+    "langName": "日本語",
+    "font":[
+        "KaiseiHarunoUmi",
+        "Arial"
+    ],
+    "test": "日本語",
+    "menu_start": "ゲーム開始",
+    "menu_continue": "続きから",
+    "menu_option": "オプション",
+    "menu_save": "今すぐ保存",
+    "menu_exit": "終了",
+    "menu_back": "戻る",
+    "saved_done": "保存しました。",
+    "option_language": "言語",
+    "option_fullscreen": "フルスクリーン",
+    "main_title": "メインゲーム",
+    "main_mode": "モード",
+    "main_stage": "ステージ",
+    "main_playtime": "プレイ時間",
+    "main_back": "ESC : 一時停止",
+    "pause_title": "ポーズ",
+    "pause_resume": "再開",
+    "pause_save": "セーブ",
+    "pause_back_title": "タイトルへ戻る"
+}

@@ -1,0 +1,26 @@
+{
+    "langName": "한국어",
+    "font":[
+        "Cafe24Ohsquare",
+        "Arial"
+    ],
+    "test": "테스트",
+    "menu_start": "게임 시작",
+    "menu_continue": "이어하기",
+    "menu_option": "옵션",
+    "menu_save": "지금 저장",
+    "menu_exit": "종료",
+    "menu_back": "뒤로",
+    "saved_done": "저장 완료.",
+    "option_language": "언어",
+    "option_fullscreen": "전체화면",
+    "main_title": "본게임",
+    "main_mode": "모드",
+    "main_stage": "스테이지",
+    "main_playtime": "플레이 시간",
+    "main_back": "ESC : 일시정지",
+    "pause_title": "일시정지",
+    "pause_resume": "계속하기",
+    "pause_save": "저장",
+    "pause_back_title": "타이틀로 돌아가기"
+}
