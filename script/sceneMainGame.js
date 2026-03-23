@@ -7,7 +7,7 @@ export class GameManager extends SceneObject {
             stage: gameData.defaultStage,
             cow: 20,
             row: 10,
-            mineAmount: 30
+            mineAmount: 20
         }
         this.stage = null
         this.board = []
@@ -155,6 +155,7 @@ export class GameManager extends SceneObject {
 
     renderBoard() {
         this.boardRoot.removeChildren()
+        this.boardRoot.removeAllListeners()
 
         const { cow, row } = this.boardConfig
         const padding = 6
@@ -173,6 +174,36 @@ export class GameManager extends SceneObject {
         this._hoveredCol = -1
         this._highlightedCells = []
 
+        this.boardRoot.eventMode = 'static'
+        this.boardRoot.cursor = 'pointer'
+        this.boardRoot.hitArea = {
+            contains: (x, y) => {
+                return x >= padding && x < boardWidth - padding &&
+                       y >= padding && y < boardHeight - padding
+            }
+        }
+        this.boardRoot.on('pointertap', (e) => {
+            if (e.button === 2) return
+            const local = this.boardRoot.toLocal(e.global)
+            const c = Math.floor((local.x - padding) / cellSize)
+            const r = Math.floor((local.y - padding) / cellSize)
+            if (r < 0 || r >= this.boardConfig.row || c < 0 || c >= this.boardConfig.cow) return
+            const cell = this.board[r]?.[c]
+            if (!cell) return
+            if (cell.isOpen) {
+                this.chordCell(r, c)
+            } else {
+                this.openCell(r, c)
+            }
+        })
+        this.boardRoot.on('rightclick', (e) => {
+            const local = this.boardRoot.toLocal(e.global)
+            const c = Math.floor((local.x - padding) / cellSize)
+            const r = Math.floor((local.y - padding) / cellSize)
+            if (r < 0 || r >= this.boardConfig.row || c < 0 || c >= this.boardConfig.cow) return
+            this.toggleFlag(r, c)
+        })
+
         this.addBoardFrame(boardWidth, boardHeight)
         this.addBoardGrid(boardWidth, boardHeight, cellSize, padding)
 
@@ -186,15 +217,6 @@ export class GameManager extends SceneObject {
                 cell.coverSprite = Img.sprite('rect', [coverSize, coverSize], 'rgb(158, 158, 158)', {
                     anchor: 0.5,
                     position: { x: centerX, y: centerY }
-                })
-                cell.coverSprite.eventMode = 'static'
-                cell.coverSprite.cursor = 'pointer'
-                cell.coverSprite.on('pointertap', (e) => {
-                    if (e.button === 2) return
-                    this.openCell(cell.row, cell.col)
-                })
-                cell.coverSprite.on('rightclick', () => {
-                    this.toggleFlag(cell.row, cell.col)
                 })
                 this.boardRoot.addChild(cell.coverSprite)
 
@@ -223,12 +245,6 @@ export class GameManager extends SceneObject {
                     position: { x: centerX, y: centerY }
                 })
                 cell.numberText.visible = false
-                cell.numberText.eventMode = 'static'
-                cell.numberText.cursor = 'pointer'
-                cell.numberText.on('pointertap', (e) => {
-                    if (e.button === 2) return
-                    this.chordCell(cell.row, cell.col)
-                })
                 this.boardRoot.addChild(cell.numberText)
 
                 const mineSize = Math.max(4, coverSize * 0.55)
@@ -297,15 +313,14 @@ export class GameManager extends SceneObject {
     chordCell(rowIndex, colIndex) {
         if (this.gameOver || this.gameClear) return
         const cell = this.board[rowIndex]?.[colIndex]
-        if (!cell || !cell.isOpen || cell.adjacent === 0) return
+        if (!cell || !cell.isOpen) return
 
-        const visibleMines = this.getVisibleQueenLineCells(this.board, rowIndex, colIndex)
-        const flaggedCount = visibleMines.filter((n) => n.isFlagged).length
+        const visibleCells = this.getVisibleQueenLineCells(this.board, rowIndex, colIndex)
+        const flaggedCount = visibleCells.filter((n) => n.isFlagged).length
         if (flaggedCount !== cell.adjacent) return
 
-        const neighbors = this.getNeighborCells(this.board, rowIndex, colIndex)
-        neighbors.forEach((n) => {
-            if (!n.isOpen && !n.isFlagged) {
+        visibleCells.forEach((n) => {
+            if (!n.isFlagged) {
                 this.openCell(n.row, n.col)
             }
         })
@@ -317,7 +332,7 @@ export class GameManager extends SceneObject {
         }
 
         const cell = this.board[rowIndex]?.[colIndex]
-        if (!cell || cell.isOpen || cell.isFlagged) {
+        if (!cell || cell.isFlagged) {
             return
         }
 
@@ -344,7 +359,7 @@ export class GameManager extends SceneObject {
             if (current.adjacent === 0) {
                 const neighbors = this.getNeighborCells(this.board, current.row, current.col)
                 neighbors.forEach((neighbor) => {
-                    if (!neighbor.isOpen && !neighbor.isMine) {
+                    if (!neighbor.isMine) {
                         stack.push(neighbor)
                     }
                 })
@@ -363,6 +378,7 @@ export class GameManager extends SceneObject {
     }
 
     showMine(cell) {
+        cell.coverSprite.visible = true
         cell.coverSprite.tint = 0x8b0000
         cell.flagText.visible = false
         cell.mineSprite.visible = true
@@ -380,8 +396,6 @@ export class GameManager extends SceneObject {
 
     applyCellState(cell) {
         cell.coverSprite.visible = !cell.isOpen
-        cell.coverSprite.eventMode = cell.isOpen ? 'passive' : 'static'
-        cell.coverSprite.cursor = cell.isOpen ? 'default' : 'pointer'
 
         if (!cell.isOpen) {
             cell.numberText.visible = false
@@ -571,7 +585,13 @@ export class GameManager extends SceneObject {
         const tint = origin.adjacent > 0 ? this.getNumberTint(origin.adjacent) : 0xffffff
         this._highlightedCells = this.getHighlightCells(rowIndex, colIndex)
         for (const cell of this._highlightedCells) {
-            cell.highlightSprite.tint = cell.isOpen ? 0xffffff : tint
+            if(cell.isOpen){
+                cell.highlightSprite.tint = 0xffffff
+                cell.highlightSprite.alpha = 0.25
+            }else{
+                cell.highlightSprite.tint = tint
+                cell.highlightSprite.alpha = 1
+            }
             cell.highlightSprite.visible = true
         }
     }
