@@ -172,7 +172,7 @@ const gameTxtsty = {
         align: 'center'
     },
     mineHeader: {
-        fontFamily: 'AnonymousPro',
+        langId: 1,
         fontSize: 54,
         fill: 'rgba(32, 32, 32, 1)',
         stroke: { color: 'rgba(255, 255, 255, 0.9)', width: 6 },
@@ -181,14 +181,14 @@ const gameTxtsty = {
     mineStatus: {
         fontFamily: 'AnonymousPro',
         fontSize: 28,
-        fill: 'rgba(24, 24, 24, 1)',
+        fill: 'rgb(255, 255, 255)',
         align: 'center'
     },
     mineCellNumber: {
         fontFamily: 'AnonymousPro',
         fontSize: 34,
-        fill: 'rgba(28, 28, 28, 1)',
-        stroke: { color: 'rgba(255, 255, 255, 0.9)', width: 4 },
+        fill: 'rgb(255, 255, 255)',
+        stroke: { color: 'rgba(0, 0, 0, 0.9)', width: 4 },
         align: 'center'
     },
     pauseTitle: {
