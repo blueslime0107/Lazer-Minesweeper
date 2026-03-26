@@ -22,5 +22,12 @@
     "pause_title": "ポーズ",
     "pause_resume": "再開",
     "pause_save": "セーブ",
-    "pause_back_title": "タイトルへ戻る"
+    "pause_back_title": "タイトルへ戻る",
+    "diff_easy": "かんたん",
+    "diff_normal": "ふつう",
+    "diff_hard": "むずかしい",
+    "game_over": "失敗",
+    "game_clear": "クリア！",
+    "restart": "リスタート",
+    "time_label": "経過時間"
 }

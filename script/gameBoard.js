@@ -35,27 +35,30 @@ export class GameBoard extends GameObject {
     }
 
     /** 보드 생성 + 렌더링 */
-    build(config, board2D) {
+    build(config, board2D, margins = null) {
         this._clear()
 
         this.config = config
         const { cow, row } = config
         const padding = this._padding
-        const marginX = 160
-        const marginTop = 210
-        const marginBottom = 90
+        const mLeft = margins?.left ?? 160
+        const mRight = margins?.right ?? 160
+        const mTop = margins?.top ?? 210
+        const mBottom = margins?.bottom ?? 90
 
         const cellSize = Math.floor(Math.min(
-            (SW - marginX * 2 - padding * 2) / cow,
-            (SH - marginTop - marginBottom - padding * 2) / row
+            (SW - mLeft - mRight - padding * 2) / cow,
+            (SH - mTop - mBottom - padding * 2) / row
         ))
         this._cellSize = cellSize
         this._boardWidth = cellSize * cow + padding * 2
         this._boardHeight = cellSize * row + padding * 2
 
+        const availW = SW - mLeft - mRight
+        const availH = SH - mTop - mBottom
         this.position.set(
-            (SW - this._boardWidth) * 0.5,
-            (SH - this._boardHeight) * 0.5
+            mLeft + (availW - this._boardWidth) * 0.5,
+            mTop + (availH - this._boardHeight) * 0.5
         )
 
         // 레이저 마스크 설정

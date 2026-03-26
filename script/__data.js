@@ -204,6 +204,41 @@ const gameTxtsty = {
         fill: 'rgba(255, 255, 255, 1)',
         stroke: { color: 'rgba(0, 0, 0, 1)', width: 6 },
         align: 'center'
+    },
+    difficultyBtn: {
+        langId: 1,
+        fontSize: 38,
+        fill: 'rgba(255, 255, 255, 1)',
+        stroke: { color: 'rgba(0, 0, 0, 1)', width: 6 },
+        align: 'center'
+    },
+    difficultyBtnSmall: {
+        langId: 1,
+        fontSize: 24,
+        fill: 'rgba(255, 255, 255, 1)',
+        stroke: { color: 'rgba(0, 0, 0, 1)', width: 4 },
+        align: 'center'
+    },
+    resultTitle: {
+        langId: 1,
+        fontSize: 64,
+        fill: 'rgba(255, 255, 255, 1)',
+        stroke: { color: 'rgba(0, 0, 0, 1)', width: 8 },
+        align: 'center'
+    },
+    resultTime: {
+        fontFamily: 'AnonymousPro',
+        fontSize: 32,
+        fill: 'rgba(255, 255, 255, 1)',
+        stroke: { color: 'rgba(0, 0, 0, 1)', width: 5 },
+        align: 'center'
+    },
+    restartBtn: {
+        langId: 1,
+        fontSize: 34,
+        fill: 'rgba(255, 255, 255, 1)',
+        stroke: { color: 'rgba(0, 0, 0, 1)', width: 5 },
+        align: 'center'
     }
 }
 

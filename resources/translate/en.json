@@ -22,5 +22,12 @@
     "pause_title": "PAUSED",
     "pause_resume": "Resume",
     "pause_save": "Save",
-    "pause_back_title": "Back to Title"
+    "pause_back_title": "Back to Title",
+    "diff_easy": "Easy",
+    "diff_normal": "Normal",
+    "diff_hard": "Hard",
+    "game_over": "GAME OVER",
+    "game_clear": "CLEAR!",
+    "restart": "Restart",
+    "time_label": "Time"
 }

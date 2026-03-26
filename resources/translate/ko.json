@@ -22,5 +22,12 @@
     "pause_title": "일시정지",
     "pause_resume": "계속하기",
     "pause_save": "저장",
-    "pause_back_title": "타이틀로 돌아가기"
+    "pause_back_title": "타이틀로 돌아가기",
+    "diff_easy": "쉬움",
+    "diff_normal": "보통",
+    "diff_hard": "어려움",
+    "game_over": "실패",
+    "game_clear": "클리어!",
+    "restart": "재시작",
+    "time_label": "걸린 시간"
 }
