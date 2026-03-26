@@ -9,7 +9,7 @@ const ThreeBG = {
         scrollSpeed: 0.5,
         camPosition: { x: 0, y: 8.5, z: 8.5 },
         comRotation: { x: 0, y: -90, z: 0 },
-        fogSetting: { color: '#1a1a1a', near: 30, far: 100 },
+        fogSetting: { color: '#bababa', near: 50, far: 100 },
         sky: "stage1_sky",
         segmentsData: {
             "plain": {

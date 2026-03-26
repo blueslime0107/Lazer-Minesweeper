@@ -29,5 +29,7 @@
     "game_over": "실패",
     "game_clear": "클리어!",
     "restart": "재시작",
-    "time_label": "걸린 시간"
+    "time_label": "걸린 시간",
+    "hud_mine": "지뢰",
+    "hud_time": "시간"
 }

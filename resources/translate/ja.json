@@ -29,5 +29,7 @@
     "game_over": "失敗",
     "game_clear": "クリア！",
     "restart": "リスタート",
-    "time_label": "経過時間"
+    "time_label": "経過時間",
+    "hud_mine": "地雷",
+    "hud_time": "時間"
 }

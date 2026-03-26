@@ -119,6 +119,7 @@ export class GameBoard extends GameObject {
                 this._numberLayer.addChild(cell.numberText)
                 this._numberLayer.addChild(cell.flagText)
                 this._numberLayer.addChild(cell.mineSprite)
+                this._coverLayer.addChild(cell.highlightBorder)
                 this._coverLayer.addChild(cell.coverSprite)
                 rowArr.push(cell)
             }
@@ -319,6 +320,8 @@ export class GameBoard extends GameObject {
 
                 // 미개방 셀의 커버 색상을 숫자 색으로 변경
                 hitCell.coverSprite.tint = tint
+                hitCell.showHighlight()
+                if (hitCell.isFlagged) hitCell.flagText.tint = 0xffff00
                 this._highlightedCells.push(hitCell)
             } else {
                 // 테두리까지 → 보드 경계를 넘어서 연장, 흰색

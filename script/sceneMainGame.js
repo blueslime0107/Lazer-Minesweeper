@@ -28,22 +28,6 @@ export class GameManager extends SceneObject {
         this.root = new Container()
         this.addChild(this.root)
 
-        // HUD
-        this.infoText = new Text({
-            text: '',
-            style: Data.styles.mineStatus,
-            anchor: 0.5,
-            position: { x: (SW - 180) * 0.5, y: 30 }
-        })
-        this.root.addChild(this.infoText)
-
-        this.helpText = new Text({
-            text: '좌클릭: 개방 / 우클릭: 깃발 / ESC: 일시정지',
-            style: Data.styles.helpText,
-            anchor: 0.5,
-            position: { x: (SW - 180) * 0.5, y: SH - 24 }
-        })
-        this.root.addChild(this.helpText)
 
         // Game Board
         this.gameBoard = new GameBoard({
@@ -51,6 +35,14 @@ export class GameManager extends SceneObject {
             onRightClick: (r, c) => this.toggleFlag(r, c)
         })
         this.root.addChild(this.gameBoard)
+        // HUD
+        this.infoText = new Text({
+            text: '',
+            style: Data.styles.mineStatus,
+            anchor: 0.5,
+            position: { x: 644, y: 30 }
+        })
+        this.root.addChild(this.infoText)
 
         // Difficulty Select Screen
         this._createDifficultySelect()
@@ -60,6 +52,9 @@ export class GameManager extends SceneObject {
 
         // Result Overlay (game over / clear)
         this._createResultOverlay()
+
+        // Language Buttons
+        this._createLangButtons()
     }
 
     // ─── Difficulty Select ───────────────────────
@@ -67,7 +62,10 @@ export class GameManager extends SceneObject {
     _createDifficultySelect() {
         this.selectContainer = new Container()
         this.root.addChild(this.selectContainer)
+        this._createDifficultySelect_content()
+    }
 
+    _createDifficultySelect_content() {
         const title = new Text({
             text: 'Lazer Minesweeper',
             style: Data.styles.titleHeader,
@@ -79,7 +77,7 @@ export class GameManager extends SceneObject {
         const difficulties = [
             { key: 'diff_easy', fallback: '쉬움', color: 'rgba(46, 125, 50, 0.85)', id: 'easy', desc: '10 × 10  /  💣 10' },
             { key: 'diff_normal', fallback: '보통', color: 'rgba(21, 101, 192, 0.85)', id: 'normal', desc: '18 × 14  /  💣 40' },
-            { key: 'diff_hard', fallback: '어려움', color: 'rgba(183, 28, 28, 0.85)', id: 'hard', desc: '24 × 20  /  💣 99' }
+            { key: 'diff_hard', fallback: '어려움', color: 'rgba(183, 28, 28, 0.85)', id: 'hard', desc: '28 × 16  /  💣 99' }
         ]
 
         const startY = SH * 0.42
@@ -113,26 +111,29 @@ export class GameManager extends SceneObject {
         })
     }
 
-    // ─── Side Buttons ────────────────────────────
+    // ─── Side Buttons ────────────────────────────build
 
     _createSideButtons() {
         this.sideContainer = new Container()
         this.root.addChild(this.sideContainer)
+        this._createSideButtons_content()
+    }
 
+    _createSideButtons_content() {
         const difficulties = [
             { key: 'diff_easy', fallback: '쉬움', color: 'rgba(46, 125, 50, 0.85)', id: 'easy' },
             { key: 'diff_normal', fallback: '보통', color: 'rgba(21, 101, 192, 0.85)', id: 'normal' },
             { key: 'diff_hard', fallback: '어려움', color: 'rgba(183, 28, 28, 0.85)', id: 'hard' }
         ]
 
-        const btnX = SW - 90
-        const startY = SH * 0.28
-        const spacing = 60
+        const btnY = SH - 22
+        const startX = SW * 0.5 - 160
+        const spacing = 160
 
         difficulties.forEach((diff, i) => {
             const bg = Img.sprite('rect', [140, 44], diff.color, { anchor: 0.5 })
             const btn = new Button(
-                { x: btnX, y: startY + i * spacing },
+                { x: startX + i * spacing, y: btnY },
                 { sprite: bg, highlightMode: 'glow' },
                 () => this._startWithDifficulty(diff.id)
             )
@@ -197,6 +198,67 @@ export class GameManager extends SceneObject {
         this.resultOverlay.addChild(this.restartBtn)
     }
 
+    // ─── Language Buttons ─────────────────────────
+
+    _createLangButtons() {
+        this.langContainer = new Container()
+        this.root.addChild(this.langContainer)
+
+        const langs = [
+            { flag: '🇰🇷', langIndex: 1 },
+            { flag: '🇺🇸', langIndex: 2 },
+            { flag: '🇯🇵', langIndex: 3 }
+        ]
+
+        const startX = 40
+        const btnY = SH - 22
+        const spacing = 50
+
+        this._langLabels = []
+
+        langs.forEach((lang, i) => {
+            const bg = Img.sprite('rect', [42, 36], 'rgba(80, 80, 80, 0.7)', { anchor: 0.5 })
+            const btn = new Button(
+                { x: startX + i * spacing, y: btnY },
+                { sprite: bg, highlightMode: 'glow' },
+                () => this._changeLanguage(lang.langIndex)
+            )
+
+            const label = new Text({
+                text: lang.flag,
+                style: Data.styles.helpText,
+                anchor: 0.5,
+                position: { x: 0, y: 0 }
+            })
+            btn.addChild(label)
+
+            this.langContainer.addChild(btn)
+        })
+    }
+
+    _changeLanguage(langIndex) {
+        Opt.setOption({ language: langIndex })
+        this._refreshAllTexts()
+    }
+
+    _refreshAllTexts() {
+        // Refresh HUD
+        if (this.boardConfig) this.refreshHud()
+
+        // Rebuild difficulty select labels
+        this.selectContainer.removeChildren()
+        this._createDifficultySelect_content()
+
+        // Rebuild side button labels
+        this.sideContainer.removeChildren()
+        this._createSideButtons_content()
+
+        // Refresh result overlay texts
+        this.restartBtn.children.forEach(c => {
+            if (c instanceof Text) c.text = Lang.t('restart', '재시작')
+        })
+    }
+
     // ─── Phase Management ────────────────────────
 
     _showPhase(phase) {
@@ -205,7 +267,6 @@ export class GameManager extends SceneObject {
         this.gameBoard.visible = phase !== 'select'
         this.sideContainer.visible = phase === 'playing'
         this.infoText.visible = phase !== 'select'
-        this.helpText.visible = phase === 'playing'
         this.resultOverlay.visible = phase === 'result'
     }
 
@@ -213,7 +274,7 @@ export class GameManager extends SceneObject {
         const configs = {
             easy: { cow: 10, row: 10, mineAmount: 10 },
             normal: { cow: 18, row: 14, mineAmount: 40 },
-            hard: { cow: 24, row: 20, mineAmount: 99 }
+            hard: { cow: 28, row: 16, mineAmount: 99 }
         }
         this.session = { ...this.session, ...configs[difficulty] }
         this._showPhase('playing')
@@ -249,15 +310,10 @@ export class GameManager extends SceneObject {
         super.update()
 
         if (this.phase === 'playing') {
-            if (Input.isPressed(KeyBind.CANCEL)) {
-                Scene.enter(Scene.sceneList.Pause)
-                return
-            }
-
             if (!this.gameOver && !this.gameClear) {
                 this.time++
+                this.refreshHud()
             }
-            this.refreshHud()
         }
     }
 
@@ -276,7 +332,7 @@ export class GameManager extends SceneObject {
         this.firstClick = true
         this.gameBoard.build(this.boardConfig, emptyBoard, {
             left: 20,
-            right: 200,
+            right: 20,
             top: 60,
             bottom: 50
         })
@@ -357,10 +413,16 @@ export class GameManager extends SceneObject {
         const cell = this.gameBoard.cells[rowIndex]?.[colIndex]
         if (!cell || cell.isFlagged) return
 
-        // 첫 클릭 시 지뢰 배치
+        // 첫 클릭 시 지뢰 배치 + 첫 셀 인접 수 0 보장
         if (this.firstClick) {
             this.firstClick = false
             this.placeMines(this.boardConfig, rowIndex, colIndex)
+            this._ensureFirstCellZero(rowIndex, colIndex)
+
+            if (this.checkClear()) return
+            this.gameBoard.refreshLasers()
+            this.refreshHud()
+            return
         }
 
         if (cell.isMine) {
@@ -371,7 +433,17 @@ export class GameManager extends SceneObject {
             return
         }
 
-        const stack = [cell]
+        this._doFloodFill(cell)
+
+        if (this.checkClear()) return
+
+        this.gameBoard.refreshLasers()
+        this.refreshHud()
+    }
+
+    /** flood-fill 개방 */
+    _doFloodFill(startCell) {
+        const stack = [startCell]
         while (stack.length > 0) {
             const current = stack.pop()
             if (!current || current.isOpen || current.isMine || current.isFlagged) continue
@@ -390,11 +462,62 @@ export class GameManager extends SceneObject {
                 })
             }
         }
+    }
 
-        if (this.checkClear()) return
+    /** 첫 클릭 셀의 표시 숫자가 0이 되도록 지뢰 재배치 */
+    _ensureFirstCellZero(firstRow, firstCol) {
+        const maxAttempts = 50
+        const firstCell = this.gameBoard.cells[firstRow][firstCol]
 
-        this.gameBoard.refreshLasers()
-        this.refreshHud()
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
+            this._doFloodFill(firstCell)
+
+            if (firstCell.adjacent === 0) return
+
+            // 첫 셀의 퀸라인에 보이는 지뢰 찾기
+            const visibleMines = this.gameBoard.getVisibleQueenLineCells(firstRow, firstCol)
+                .filter(c => c.isMine)
+
+            // 재배치 후보: 지뢰가 아니고 개방되지 않은 셀
+            const candidates = []
+            for (let r = 0; r < this.boardConfig.row; r++) {
+                for (let c = 0; c < this.boardConfig.cow; c++) {
+                    const cell = this.gameBoard.cells[r][c]
+                    if (!cell.isMine && !cell.isOpen) {
+                        candidates.push(cell)
+                    }
+                }
+            }
+
+            for (const mine of visibleMines) {
+                if (candidates.length === 0) break
+                const idx = Math.floor(Rnd.random() * candidates.length)
+                const target = candidates[idx]
+                mine.isMine = false
+                target.isMine = true
+                candidates.splice(idx, 1)
+            }
+
+            // 보드 리셋 후 재시도
+            this._resetAllCells()
+        }
+
+        // 최대 시도 초과 시 그대로 flood-fill 진행
+        this._doFloodFill(firstCell)
+    }
+
+    /** 모든 셀을 미개방 상태로 리셋 */
+    _resetAllCells() {
+        const { row, cow } = this.boardConfig
+        for (let r = 0; r < row; r++) {
+            for (let c = 0; c < cow; c++) {
+                const cell = this.gameBoard.cells[r][c]
+                cell.isOpen = false
+                cell.adjacent = 0
+                cell.applyCellState()
+            }
+        }
+        this.openedSafeCells = 0
     }
 
     checkClear() {
@@ -431,7 +554,7 @@ export class GameManager extends SceneObject {
         const totalSec = Math.floor(this.time / 60)
         const mm = String(Math.floor(totalSec / 60)).padStart(2, '0')
         const ss = String(totalSec % 60).padStart(2, '0')
-        this.infoText.text = `지뢰 ${Math.max(0, this.boardConfig.mineAmount - this.flagCount)} / 시간 ${mm}:${ss}`
+        this.infoText.text = `${Lang.t('hud_mine', '지뢰')} ${Math.max(0, this.boardConfig.mineAmount - this.flagCount)} / ${Lang.t('hud_time', '시간')} ${mm}:${ss}`
     }
 }
 

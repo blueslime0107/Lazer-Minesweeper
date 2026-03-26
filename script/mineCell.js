@@ -14,6 +14,7 @@ export class MineCell {
         this._callbacks = callbacks
 
         this.coverSprite = null
+        this.highlightBorder = null
         this.flagText = null
         this.numberText = null
         this.mineSprite = null
@@ -42,7 +43,6 @@ export class MineCell {
             cursor: 'pointer'
         })
         this.coverSprite.on('pointerdown', (e) => {
-            console.log("???")
             if (e.button === 2) return
             this._callbacks.onLeftClick(this.row, this.col)
         })
@@ -50,33 +50,43 @@ export class MineCell {
             this._callbacks.onRightClick(this.row, this.col)
         })
 
+        // 하이라이트 테두리
+        this.highlightBorder = Img.sprite('rect', [coverSize + 4, coverSize + 4], 'rgba(255,255,255,0.5)', {
+            anchor: 0.5,
+            position: { x: cx, y: cy },
+            visible: false
+        })
+
         // 깃발
         this.flagText = new Text({
-            text: '▶',
+            text: '🏳️',
             style: Data.styles.mineCellNumber,
             anchor: 0.5,
-            position: { x: cx, y: cy }
+            position: { x: cx, y: cy },
+            scale: coverSize/59*1.5,
+            tint: "#ff0000",
+            visible: false
         })
-        this.flagText.scale.set(0.8)
-        this.flagText.tint = 0xd32f2f
-        this.flagText.visible = false
 
         // 숫자
         this.numberText = new Text({
             text: '',
             style: Data.styles.mineCellNumber,
             anchor: 0.5,
-            position: { x: cx, y: cy }
+            position: { x: cx, y: cy },
+            scale: coverSize/59 *1.5 ,
+            visible: false
         })
-        this.numberText.visible = false
 
         // 지뢰
-        const mineSize = Math.max(4, coverSize * 0.35)
-        this.mineSprite = Img.sprite('circle', mineSize, 'rgba(220, 40, 40, 1)', {
+        this.mineSprite = new Text({
+            text: '💥',
+            style: Data.styles.mineCellImogii,
             anchor: 0.5,
-            position: { x: cx, y: cy }
+            position: { x: cx, y: cy },
+            scale: coverSize/59 *1.5 ,
+            visible: false
         })
-        this.mineSprite.visible = false
     }
 
     /** 셀 상태에 따라 스프라이트 갱신 */
@@ -101,6 +111,9 @@ export class MineCell {
     toggleFlag() {
         this.isFlagged = !this.isFlagged
         this.flagText.visible = this.isFlagged
+        if (this.isFlagged && this.coverSprite.tint !== MineCell.COVER_TINT) {
+            this.flagText.tint = 0xffff00
+        }
     }
 
     showMine() {
@@ -110,21 +123,31 @@ export class MineCell {
         this.mineSprite.visible = true
     }
 
+    showHighlight() {
+        this.highlightBorder.visible = true
+    }
+
+    hideHighlight() {
+        this.highlightBorder.visible = false
+    }
+
     resetCoverTint() {
         this.coverSprite.tint = MineCell.COVER_TINT
+        this.highlightBorder.visible = false
+        if (this.isFlagged) this.flagText.tint = 0xff0000
     }
 
     static getNumberTint(value) {
         const palette = {
-            1: 0x1d4ed8,
-            2: 0x15803d,
-            3: 0xb91c1c,
-            4: 0x312e81,
-            5: 0x854d0e,
-            6: 0x0f766e,
-            7: 0x111827,
-            8: 0x4b5563
+            1: "#1d4ed8",
+            2: "#15803d",
+            3: "#b91c1c",
+            4: "#312e81",
+            5: "#854d0e",
+            6: "#0f766e",
+            7: "#111827",
+            8: "#4b5563"
         }
-        return palette[value] || 0x1f2937
+        return palette[value] || "#1f2937"
     }
 }

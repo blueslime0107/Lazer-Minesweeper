@@ -185,10 +185,16 @@ const gameTxtsty = {
         align: 'center'
     },
     mineCellNumber: {
-        fontFamily: 'AnonymousPro',
+        fontFamily: 'Cafe24Ohsquare',
         fontSize: 34,
         fill: 'rgb(255, 255, 255)',
         stroke: { color: 'rgba(0, 0, 0, 0.9)', width: 4 },
+        align: 'center'
+    },
+    mineCellImogii: {
+        fontFamily: 'AnonymousPro',
+        fontSize: 34,
+        fill: 'rgb(255, 255, 255)',
         align: 'center'
     },
     pauseTitle: {

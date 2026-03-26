@@ -1,4 +1,5 @@
 {
     "workbench.colorTheme": "Dark Modern",
+    "window.autoDetectColorScheme": false,
     "liveServer.settings.port": 5504
 }

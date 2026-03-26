@@ -29,5 +29,7 @@
     "game_over": "GAME OVER",
     "game_clear": "CLEAR!",
     "restart": "Restart",
-    "time_label": "Time"
+    "time_label": "Time",
+    "hud_mine": "Mines",
+    "hud_time": "Time"
 }
