@@ -3,9 +3,7 @@ const gameData = {
     "currentLanguage": 1,
     "scaleMode": 'nearest',
     "scene":[
-        "Title",
-        "MainGame",
-        "Pause"
+        "MainGame"
     ],
     "startScene": "MainGame",
     "startSceneOption": {
