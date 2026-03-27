@@ -2,6 +2,16 @@
 const TextureAssets = {
     player:'player.png',
     bullet:'bullet.png',
+    manual1:'manual/manual1.png',
+    manual2_1:'manual/manual2_1.png',
+    manual2_2:'manual/manual2_2.png',
+    manual3_1:'manual/manual3_1.png',
+    manual3_2:'manual/manual3_2.png',
+    manual3_3:'manual/manual3_3.png',
+    manual4_1:'manual/manual4_1.png',
+    manual4_2:'manual/manual4_2.png',
+    manual4_3:'manual/manual4_3.png',
+
 }
 
 const Textures = {

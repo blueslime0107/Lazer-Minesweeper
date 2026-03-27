@@ -129,7 +129,7 @@ gui.hide();
   app.stage.addChild(threeBgSprite);
 
   // 폰트 로딩
-  await document.fonts.load('24px Cafe24Ohsquare');
+  await document.fonts.load('24px Cafe24Oneprettynight');
   await document.fonts.load('24px AnonymousPro');
   await document.fonts.load('24px KaiseiHarunoUmi');
   await document.fonts.ready;

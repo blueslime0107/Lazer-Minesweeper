@@ -31,5 +31,16 @@
     "restart": "Restart",
     "time_label": "Time",
     "hud_mine": "Mines",
-    "hud_time": "Time"
+    "hud_time": "Time",
+    "tutorial": "Tutorial",
+    "manual_1_1": "This game finds mines differently from classic Minesweeper.",
+    "manual_1_2": "Classic shows the mine count in the surrounding 8 cells, but",
+    "manual_1_3": "here, lasers fire in 8 directions (up/down/left/right/diagonals)\nand show the mine count of tiles they touch.",
+    "manual_2_1": "Click an open tile to display its lasers\nand see which tiles it connects to.",
+    "manual_3_1": "The mine count updates in real-time\nas tiles are opened.",
+    "manual_3_2": "Use this to figure out which direction\na mine was found and identify it.",
+    "manual_3_3": "1. Select a specific opened tile.\n2. Open a tile along one laser direction.\n3. Repeat — stop when the selected tile's number increases.",
+    "manual_3_4": "\nIf the number increased, it means a new mine was found in that direction, so the tile you just opened has a mine.",
+    "manual_4_1": "Mines aren't only found through lasers.",
+    "manual_4_2": "1. Open a tile.\n2. If a number increases in one direction, check the opposite.\nOpening tiles extends other tiles' lasers too.\n\nYou may find extra mines this way,\nso watch which numbers change when you open a tile."
 }

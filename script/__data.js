@@ -186,7 +186,7 @@ const gameTxtsty = {
         fontFamily: 'Cafe24Ohsquare',
         fontSize: 34,
         fill: 'rgb(255, 255, 255)',
-        stroke: { color: 'rgba(0, 0, 0, 0.9)', width: 4 },
+        stroke: { color: 'rgba(112, 112, 112, 0.9)', width: 4 },
         align: 'center'
     },
     mineCellImogii: {
@@ -242,6 +242,36 @@ const gameTxtsty = {
         fontSize: 34,
         fill: 'rgba(255, 255, 255, 1)',
         stroke: { color: 'rgba(0, 0, 0, 1)', width: 5 },
+        align: 'center'
+    },
+    manualText: {
+        langId: 1,
+        fontSize: 24,
+        fill: 'rgba(255, 255, 255, 1)',
+        lineHeight: 34,
+        align: 'center',
+        wordWrap: true,
+        wordWrapWidth: 540
+    },
+    manualTextLeft: {
+        langId: 1,
+        fontSize: 22,
+        fill: 'rgba(220, 230, 255, 1)',
+        lineHeight: 32,
+        align: 'left',
+        wordWrap: true,
+        wordWrapWidth: 360
+    },
+    manualPage: {
+        fontFamily: 'AnonymousPro',
+        fontSize: 20,
+        fill: 'rgba(180, 190, 210, 1)',
+        align: 'center'
+    },
+    manualClose: {
+        fontFamily: 'AnonymousPro',
+        fontSize: 28,
+        fill: 'rgba(255, 255, 255, 1)',
         align: 'center'
     }
 }
