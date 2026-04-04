@@ -70,7 +70,7 @@ export class GameManager extends SceneObject {
 
     _createDifficultySelect_content() {
         const title = new Text({
-            text: 'Lazer Minesweeper',
+            text: 'Laser Minesweeper',
             style: Data.styles.titleHeader,
             anchor: 0.5,
             position: { x: SW * 0.5, y: SH * 0.2 }

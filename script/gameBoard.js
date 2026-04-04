@@ -32,6 +32,13 @@ export class GameBoard extends GameObject {
         this._openCellHit.eventMode = 'static'
         this._openCellHit.cursor = 'pointer'
         this.addChild(this._openCellHit)
+
+        // 모바일 액션 팝업 레이어 (최상단)
+        this._mobilePopup = new Container()
+        this._mobilePopupRow = -1
+        this._mobilePopupCol = -1
+        this._stageDismissOverlay = null
+        this.addChild(this._mobilePopup)
     }
 
     /** 보드 생성 + 렌더링 */
@@ -111,7 +118,13 @@ export class GameBoard extends GameObject {
             for (let colIndex = 0; colIndex < cow; colIndex++) {
                 const src = board2D[rowIndex][colIndex]
                 const cell = new MineCell(rowIndex, colIndex, cellSize, padding, {
-                    onLeftClick: (r, c) => this._callbacks.onOpen(r, c),
+                    onLeftClick: (r, c) => {
+                        if (isMobileDevice()) {
+                            this._showMobilePopup(r, c)
+                        } else {
+                            this._callbacks.onOpen(r, c)
+                        }
+                    },
                     onRightClick: (r, c) => this._callbacks.onRightClick(r, c)
                 })
                 cell.isMine = src.isMine
@@ -137,6 +150,7 @@ export class GameBoard extends GameObject {
         this._numberLayer.removeChildren()
         this._coverLayer.removeChildren()
         this._openCellHit.removeAllListeners()
+        this._hideMobilePopup()
         this.cells = []
     }
 
@@ -352,5 +366,118 @@ export class GameBoard extends GameObject {
         this._clearVisuals()
         this._laserRow = -1
         this._laserCol = -1
+    }
+
+    // ─── 모바일 액션 팝업 ────────────────────────
+
+    _showMobilePopup(r, c) {
+        this._mobilePopup.removeChildren()
+        this._mobilePopupRow = r
+        this._mobilePopupCol = c
+
+        const cs = this._cellSize
+        const p = this._padding
+        const btnR = Math.max(24, Math.floor(cs * 0.48))
+        const gap = btnR * 2 + 10
+
+        const cx = p + c * cs + cs * 0.5
+        const cy = p + r * cs + cs * 0.5
+
+        // 버튼 위치 계산 (보드 밖으로 나가지 않도록 클램프)
+        const minX = p + btnR
+        const maxX = this._boardWidth - p - btnR
+        const minY = p + btnR
+        const maxY = this._boardHeight - p - btnR
+
+        const shovelX = Math.max(minX, Math.min(maxX, cx))
+        const shovelY = Math.max(minY, Math.min(maxY, cy))
+
+        // 깃발 버튼: 기본은 오른쪽, 오른쪽 공간 부족 시 왼쪽
+        let flagX = shovelX + gap
+        if (flagX + btnR > this._boardWidth - p) flagX = shovelX - gap
+        flagX = Math.max(minX, Math.min(maxX, flagX))
+        const flagY = shovelY
+
+        // 보드 전체 오버레이 (팝업 외부 클릭 감지)
+        const bw = this._boardWidth
+        const bh = this._boardHeight
+        const overlay = new Graphics()
+        overlay.rect(0, 0, bw, bh).fill({ color: 0x000000, alpha: 0.001 })
+        overlay.eventMode = 'static'
+        overlay.hitArea = { contains: (x, y) => x >= 0 && x <= bw && y >= 0 && y <= bh }
+        overlay.on('pointerdown', () => this._hideMobilePopup())
+        this._mobilePopup.addChild(overlay)
+
+        // 삽 버튼 (셀 개방)
+        const shovelBtn = this._makeMobileCircleBtn(shovelX, shovelY, btnR, '⛏️', 0x0d2b0d, 0x44dd44)
+        shovelBtn.on('pointerdown', (e) => {
+            e.stopPropagation()
+            this._hideMobilePopup()
+            this._callbacks.onOpen(r, c)
+        })
+        this._mobilePopup.addChild(shovelBtn)
+
+        // 깃발 버튼 (깃발 설치)
+        const flagBtn = this._makeMobileCircleBtn(flagX, flagY, btnR, '🚩', 0x2b0d0d, 0xdd4444)
+        flagBtn.on('pointerdown', (e) => {
+            e.stopPropagation()
+            this._hideMobilePopup()
+            this._callbacks.onRightClick(r, c)
+        })
+        this._mobilePopup.addChild(flagBtn)
+
+        this._mobilePopup.visible = true
+
+        // 보드 외부 클릭 감지: stage 최하단에 전화면 오버레이 등록
+        if (this._stageDismissOverlay) {
+            app.stage.removeChild(this._stageDismissOverlay)
+        }
+        this._stageDismissOverlay = new Graphics()
+        this._stageDismissOverlay.rect(0, 0, SW, SH).fill({ color: 0x000000, alpha: 0.001 })
+        this._stageDismissOverlay.eventMode = 'static'
+        this._stageDismissOverlay.hitArea = { contains: (x, y) => x >= 0 && x <= SW && y >= 0 && y <= SH }
+        this._stageDismissOverlay.on('pointerdown', () => this._hideMobilePopup())
+        // 다음 프레임에 등록 (현재 탭 이벤트가 즉시 트리거되지 않도록)
+        setTimeout(() => {
+            if (this._stageDismissOverlay) {
+                app.stage.addChildAt(this._stageDismissOverlay, 0)
+            }
+        }, 0)
+    }
+
+    _hideMobilePopup() {
+        if (this._stageDismissOverlay) {
+            if (this._stageDismissOverlay.parent) {
+                app.stage.removeChild(this._stageDismissOverlay)
+            }
+            this._stageDismissOverlay = null
+        }
+        this._mobilePopup.visible = false
+        this._mobilePopup.removeChildren()
+        this._mobilePopupRow = -1
+        this._mobilePopupCol = -1
+    }
+
+    _makeMobileCircleBtn(x, y, radius, icon, bgColor, borderColor) {
+        const container = new Container()
+        container.position.set(x, y)
+        container.eventMode = 'static'
+        container.cursor = 'pointer'
+
+        const gfx = new Graphics()
+        gfx.circle(0, 0, radius).fill({ color: bgColor, alpha: 0.92 })
+        gfx.circle(0, 0, radius).stroke({ width: 3, color: borderColor, alpha: 1 })
+        container.addChild(gfx)
+
+        const label = new Text({
+            text: icon,
+            style: Data.styles.mineCellImogii,
+            anchor: 0.5,
+            position: { x: 0, y: 0 },
+            scale: radius / 30
+        })
+        container.addChild(label)
+
+        return container
     }
 }

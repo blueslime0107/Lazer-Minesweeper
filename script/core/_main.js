@@ -169,6 +169,7 @@ const meter = new FPSMeter({
   theme: 'dark', // light/dark/transparent/colorful
   graph: 1,
 });
+meter.hide()
 
 function loop(ts) {
   if (!startTime) startTime = ts;
